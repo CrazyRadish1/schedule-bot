@@ -102,6 +102,7 @@ def run_bot():
     events = sorted(events, key=lambda e: e.get('DTSTART').dt)
 
     message_lines = [f'{tomorrow:%d.%m (%a)}']
+    message_lines.append('')
 
     day_lessons = []
 
@@ -145,9 +146,11 @@ def run_bot():
         standup = out - timedelta(minutes=45)
         wakeup = standup - timedelta(minutes=30)
 
-        message_lines.append(
-            f'первая пара в {start:%H:%M}, проснуться: {wakeup:%H:%M}, встать: {standup:%H:%M}, время выхода: {out:%H:%M}'
-        )
+        message_lines.append('')
+        message_lines.append(f'первая пара в {start:%H:%M}')
+        message_lines.append(f'проснуться: {wakeup:%H:%M}')
+        message_lines.append(f'встать: {standup:%H:%M}')
+        message_lines.append(f'время выхода: {out:%H:%M}')
 
     message_lines.append('')
 
@@ -224,7 +227,6 @@ def run_bot():
                     'text': text
                 }
             )
-
 
     send_telegram(final_text)
 
