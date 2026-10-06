@@ -2,3 +2,4 @@ requests
 icalendar
 recurring-ical-events
 python-dotenv
+flask
