@@ -211,17 +211,16 @@ def run_bot():
 
     def send_telegram(text):
         token = os.getenv('TELEGRAM_TOKEN')
-        chat_id = os.getenv('TELEGRAM_CHAT_ID')
+        chat_ids = os.getenv('TELEGRAM_CHAT_IDS').split(',')
 
-        requests.post(
-            f'https://api.telegram.org/bot{token}/sendMessage',
-            data={
-                'chat_id': chat_id,
-                'text': text
-            }
-        )
-
-    send_telegram(final_text)
+        for chat_id in chat_ids:
+            requests.post(
+                f'https://api.telegram.org/bot{token}/sendMessage',
+                data={
+                    'chat_id': chat_id.strip(),
+                    'text': text
+                }
+            )
 
 
 @app.route('/')
