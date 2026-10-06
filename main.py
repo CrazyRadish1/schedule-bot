@@ -1,10 +1,11 @@
-from flask import Flask
 import threading
+
+from flask import Flask
 
 app = Flask(__name__)
 
 import os
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 import recurring_ical_events
@@ -141,9 +142,11 @@ def run_bot():
         )
 
         out = start - timedelta(minutes=minutes_before)
+        standup = out - timedelta(minutes=45)
+        wakeup = standup - timedelta(minutes=30)
 
         message_lines.append(
-            f'первая пара в {start:%H:%M}, время выхода: {out:%H:%M}'
+            f'первая пара в {start:%H:%M}, проснуться: {wakeup:%H:%M}, встать: {standup:%H:%M}, время выхода: {out:%H:%M}'
         )
 
     message_lines.append('')
@@ -178,15 +181,15 @@ def run_bot():
             items.append('зарядка')
 
         if (
-            'мфк' in day_lessons
-            or 'математическая теория грамматик' in day_lessons
+                'мфк' in day_lessons
+                or 'математическая теория грамматик' in day_lessons
         ):
             items.append('блокнот')
             items.append('ручка')
 
         if (
-            'теоретический синтаксис' in day_lessons
-            and 'ручка' not in items
+                'теоретический синтаксис' in day_lessons
+                and 'ручка' not in items
         ):
             items.append('ручка')
 
@@ -221,7 +224,9 @@ def run_bot():
                     'text': text
                 }
             )
-    send_telegram(final_text)
+
+
+send_telegram(final_text)
 
 
 @app.route('/')
