@@ -236,6 +236,11 @@ def home():
     return 'Bot is running'
 
 
+@app.route("/ping")
+def ping():
+    return "OK", 200
+
+
 @app.route('/run')
 def run():
     print('RUN ENDPOINT CALLED')
