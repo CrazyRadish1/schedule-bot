@@ -62,6 +62,10 @@ def run_bot():
         )
 
         hours = tomorrow_forecast["hours"]
+        parts = tomorrow_forecast["parts"]
+        temp_morning = round(parts["morning"]["temp_avg"])
+        temp_day = round(parts["day"]["temp_avg"])
+        temp_evening = round(parts["evening"]["temp_avg"])
 
         rain_hours = [h for h in hours if h["prec_type"] != 0]
 
@@ -87,7 +91,7 @@ def run_bot():
         else:
             sky_text = "пасмурно"
 
-        return has_rain, rain_text, max_wind, sky_text
+        return has_rain, rain_text, max_wind, sky_text, temp_morning, temp_day, temp_evening
 
     response = requests.get(url)
     text = response.text
@@ -144,10 +148,13 @@ def run_bot():
 
     message_lines.append('')
 
-    has_rain, rain_text, max_wind, sky_text = weather()
+    has_rain, rain_text, max_wind, sky_text, temp_morning, temp_day, temp_evening = weather()
 
     message_lines.append(
         f'погода: {sky_text}, ветер до {max_wind:.0f} м/с, {rain_text}'
+    )
+    message_lines.append(
+        f'температура: утром {temp_morning}°, днём {temp_day}°, вечером {temp_evening}°'
     )
 
     message_lines.append('')
