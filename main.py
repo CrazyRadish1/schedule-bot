@@ -211,7 +211,7 @@ def run_bot():
 
     def send_telegram(text):
         token = os.getenv('TELEGRAM_TOKEN')
-        chat_ids = os.getenv('TELEGRAM_CHAT_IDS').split(',')
+        chat_ids = os.getenv('TELEGRAM_CHAT_IDs').split(',')
 
         for chat_id in chat_ids:
             requests.post(
