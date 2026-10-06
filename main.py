@@ -221,6 +221,7 @@ def run_bot():
                     'text': text
                 }
             )
+    send_telegram(final_text)
 
 
 @app.route('/')
