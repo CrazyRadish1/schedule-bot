@@ -156,6 +156,7 @@ def home():
 
 @app.route('/run')
 def run():
+    print('RUN ENDPOINT CALLED')
     threading.Thread(target=run_bot).start()
     return 'Bot started'
 
