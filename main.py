@@ -123,7 +123,7 @@ def run_bot():
             )
         else:
             message_lines.append(
-                f'Весь день: {summary}'
+                f'весь день: {summary}'
             )
 
         if summary.lower() in classes:
