@@ -5,7 +5,7 @@ from flask import Flask
 app = Flask(__name__)
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from zoneinfo import ZoneInfo
 
 import recurring_ical_events
@@ -41,6 +41,12 @@ def run_bot():
         if isinstance(dt, datetime):
             return dt.astimezone(tz)
         return dt
+
+    def sort_key(e):
+        dt = e.get('DTSTART').dt
+        if isinstance(dt, datetime):
+            return dt.astimezone(tz)
+        return datetime.combine(dt, time.min, tzinfo=tz)
 
     def weather():
         access_key = os.getenv('YWEATHER_KEY')
@@ -99,7 +105,7 @@ def run_bot():
     calendar = Calendar.from_ical(text)
 
     events = recurring_ical_events.of(calendar).at(tomorrow)
-    events = sorted(events, key=lambda e: e.get('DTSTART').dt)
+    events = sorted(events, key=sort_key)
 
     message_lines = [f'{tomorrow:%d.%m (%a)}']
     message_lines.append('')
@@ -126,12 +132,13 @@ def run_bot():
     lesson_events = [
         e for e in events
         if str(e.get('SUMMARY')).lower() in classes
+        and isinstance(e.get('DTSTART').dt, datetime)
     ]
 
     if lesson_events:
         first_event = min(
             lesson_events,
-            key=lambda e: e.get('DTSTART').dt
+            key=sort_key
         )
 
         start = to_msk(first_event.get('DTSTART').dt)
