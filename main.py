@@ -185,7 +185,7 @@ def run_bot():
     has_rain, rain_text, max_wind, sky_text, temp_morning, temp_day, temp_evening = weather()
 
     message_lines.append(
-        f'погода: {sky_text}, ветер до {max_wind:.0f} м/с, {rain_text}'
+        f'погода: {sky_text}, ветер до {max_wind:.0f} м/с {rain_text}'
     )
     message_lines.append(
         f'температура: утром {temp_morning}°, днём {temp_day}°, вечером {temp_evening}°'
