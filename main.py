@@ -74,16 +74,37 @@ def run_bot():
         temp_day = round(parts["day"]["temp_avg"])
         temp_evening = round(parts["evening"]["temp_avg"])
 
-        rain_hours = [h for h in hours if h["prec_type"] != 0]
+        
+        prec_names = {
+            1: "дождь",
+            2: "снег с дождём",
+            3: "снег",
+            4: "град"
+        }
 
-        if rain_hours:
-            has_rain = 1
-            start = rain_hours[0]["hour"]
-            end = rain_hours[-1]["hour"]
-            rain_text = f"дождь с {start}:00 до {end}:00"
-        else:
-            has_rain = 0
-            rain_text = "без дождя"
+        has_rain = any(h["prec_type"] in (1, 2, 4) for h in hours)
+
+        periods = []
+        for h in hours:
+            prec = h["prec_type"]
+            hour = int(h["hour"])
+
+            if prec == 0:
+                continue
+
+            if (
+                periods
+                and periods[-1][0] == prec
+                and periods[-1][2] + 1 == hour
+            ):
+                periods[-1][2] = hour
+            else:
+                periods.append([prec, hour, hour])
+
+        rain_text = "; ".join(
+            f"{prec_names.get(prec, 'осадки')} с {start:02d}:00 до {end + 1:02d}:00"
+            for prec, start, end in periods
+        ) or "без осадков"
 
         max_wind = max(h["wind_gust"] for h in hours)
 
