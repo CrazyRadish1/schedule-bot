@@ -101,7 +101,7 @@ def run_bot():
             else:
                 periods.append([prec, hour, hour])
 
-        rain_text = "\n".join(
+        rain_text = "\n" + "\n".join(
             f"{prec_names.get(prec, 'осадки')} с {start:02d}:00 до {end + 1:02d}:00"
             for prec, start, end in periods
         ) or "без осадков"
